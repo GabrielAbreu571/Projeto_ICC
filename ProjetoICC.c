@@ -15,11 +15,27 @@ struct prod{
     double preco;
 };
 
-typedef struct prod produtos;
+typedef struct prod produto;
 
-// adicionar funcões
+// Protótipos das funções
+
+void adicionaItens(produtos *a);
+void aumentaEstoque();
+void modificaPreco();
+void realizaVenda();
+void consuntaEstoque();
+void consultaSaldo();
+void finalizaDia();
 
 // usaremos arquivos
+
+void adicionaItens(produtos *a){
+    scanf("%s %llu %lf", a.nomeProd, a.quantidade, a.preco);
+}
+
+void aumentaEstoque(){
+
+}
 
 int main(void){
 
