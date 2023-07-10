@@ -20,7 +20,7 @@ typedef struct prod produto;
 // Protótipos das funções
 
 void adicionaItens(produtos *a);
-void aumentaEstoque();
+void aumentaEstoque(unsigned int codigo, unsigned int quantidade);
 void modificaPreco();
 void realizaVenda();
 void consuntaEstoque();
@@ -29,24 +29,50 @@ void finalizaDia();
 
 // usaremos arquivos
 
-void adicionaItens(produtos *a){
-    scanf("%s %llu %lf", a.nomeProd, a.quantidade, a.preco);
+produto *adicionaItens(unsigned int estoque;){
+    produto *a;
+    if((a = (produto *) malloc(estoque * sizeof(produto))) == NULL){
+        printf("Erro ao alocar memória");
+        exit (1);
+    } 
+
+    for(int i = 0; i < estoque; i++){
+        scanf("%s %llu %lf", a[i].nomeProd, &(a[i].quantidade), &(a[i].preco));  
+    }
+
+    return a;
 }
 
-void aumentaEstoque(){
-
+void aumentaEstoque(){            
+    
 }
 
 int main(void){
-
+    unsigned int estoque;
+    long long int saldo;
+    FILE *fp;
+    char ip[3]; 
     // etapas:
     // 1
     // 2
+    if(fp = fopen()){
+
+    } else{
+        scanf("%u %lld", &estoque, &saldo);
+        adicionaItens(estoque);
+    }
+    
     // 3
     // 4
+
+    while(scanf("%s", id)){
+
+    }
     // 5
     // 6
     // 7
-
+    if(fclose){
+        exit(1);
+    }
     return 0;
 }
