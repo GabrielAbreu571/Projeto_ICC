@@ -43,8 +43,8 @@ produto *adicionaItens(unsigned int estoque;){
     return a;
 }
 
-void aumentaEstoque(produto *a, unsigned long long int total){            
-    a.quantidade = a.quantidade + total;
+void aumentaEstoque(produto *a, unsigned long long int quantidade){            
+    a.quantidade = a.quantidade + quantidade;
 
 }
 
