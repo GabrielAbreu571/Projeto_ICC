@@ -20,7 +20,7 @@ typedef struct prod produto;
 // Protótipos das funções
 
 void adicionaItens(produtos *a);
-void aumentaEstoque(unsigned int codigo, unsigned int quantidade);
+void aumentaEstoque(produto *a, unsigned int quantidade);
 void modificaPreco();
 void realizaVenda();
 void consuntaEstoque();
@@ -46,6 +46,10 @@ produto *adicionaItens(unsigned int estoque;){
 void aumentaEstoque(produto *a, unsigned long long int quantidade){            
     a.quantidade = a.quantidade + quantidade;
 
+}
+
+void modificaPreco(produto *a, double valor){
+    a.preco = valor;
 }
 
 int main(void){
