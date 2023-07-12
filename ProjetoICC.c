@@ -18,7 +18,7 @@ struct prod{
 typedef struct prod produto;
 
 // Protótipos das funções
-/*
+
 produto *alocaProduto(unsigned int estoque);
 void inserirProduto(produto** dados);//char *nome, unsigned int quantidade, double preco
 void aumentaEstoque(produto *a, unsigned long long int quantidade);
@@ -27,9 +27,9 @@ void realizaVenda();
 void consuntaEstoque();
 void consultaSaldo();
 void finalizaDia();
-*/
+
 // usaremos arquivos (binários)
-/*
+
 produto *alocaProduto(unsigned int estoque){
     produto *prod;
 
@@ -40,27 +40,36 @@ produto *alocaProduto(unsigned int estoque){
 //precisa tambem realocar dinâmicamente o vetor de produtos
     return prod; 
 }
-*/
+
 void inserirProduto(produto** dados,unsigned int qtd/char *nome, unsigned int quantidade, double preco/){ 
     //tem que passar o ponteiro do produto
     int t=qtd;
     (dados)=(produto)realloc(*dados,(t+1)*sizeof(produto));
     scanf("%s %llu %lf", (*dados)[t].nomeProd, &((*dados)[t].quantidade), &((*dados)[t].preco));    
 }   
-/*
+
 void aumentaEstoque(produto *a, unsigned long long int quantidade){            
-    a.quantidade = a.quantidade + quantidade;//derreferenciar
+    *a.quantidade = *a.quantidade + quantidade;//derreferenciar
 }
 
 void modificaPreco(produto *a, double valor){
-    a.preco = valor;//derreferenciae?
+    *a.preco = valor;//derreferenciae?
 }
+
+void realizaVenda(int codigo){
+    dados[codigo].quantidade--;
+}
+
+void realizaVenda(int codigo){
+
+}
+
 
 void finalizaDia(){
     // mexer com os arquivos
     exit(1);
 }
-*/
+
 int main(void){
     unsigned int qtdEstoque;
     long long int saldo;
@@ -94,8 +103,7 @@ int main(void){
     }
      
     inserirProduto(&dados,qtdEstoque);
-
-/*
+// falta adicionar os codigos dos produtos
     while(1){
         scanf("%s", id);
 
@@ -104,7 +112,7 @@ int main(void){
             qtdEstoque++;
             if(qtdEstoque > 0){
                 for(int i = 0; i < qtdEstoque; i++){
-                    scanf("%s %u %lf", );
+                    
                     dados[i] = inserirProduto(dados[i].nomeProd, dados[i].);
                 }
             } else{
@@ -112,35 +120,38 @@ int main(void){
             }
 
         } else if(id == "AE"){
-            scanf("%s %u %lf", );
+            
+
         } else if(id == "MP"){
-            scanf("%s %u %lf", );
+            
+
+
         } else if(id == "VE"){
             int codigo;
-            scanf("%s %u %lf", );
 
             while(scanf("%d", codigo) != -1){
-
+                double total = 0;
+                realizaVenda(codigo);
+                printf("%s %.2lf\n", dados[codigo].nomeProd, dados[codigo].preco)
+                total += dados[codigo].preco.
             }
-
+            saldo += total;
+            printf("%.2lf", total);
             printf("\n--------------------------------------------------");
         } else if(id == "CE"){
-            
+            for(int i = 0; i < qtdEstoque; i++){
+                printf("%d %s %llu\n", /*codigo*/, dados[i].nomeProd, dados[i].quantidade);
+            }
             printf("\n--------------------------------------------------");
         } else if(id == "CS"){
-            
+            printf("Saldo: %.2lf", saldo);
             printf("\n--------------------------------------------------");
         } else if(id == "FE"){
             // usar arquivos
             finalizaDia();
         }
     }
-    */
-    // 3
-    // 4
-    // 5
-    // 6
-    // 7
+
     fprintf(fp,"%u\n",qtdEstoque);
     fprintf(fp,"%lld\n",saldo);
     
