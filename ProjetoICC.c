@@ -1,160 +1,175 @@
 /*
-Trabalho feito para a disciplina: Introdução a Ciência da Computação 1
+Trabalho feito para a disciplina Introdução a Ciência da Computação 1
 Professor: Rudinei Goulart
 Integrantes: Gabriel de Andrade Abreu NUMUSP: 14571362
              Guilherme Antonio Costa Bandeira NUMUSP: 14575620 
              Antônio Carlos de Almeida Micheli Neto NUMUSP: 14559013
 */
 
+#include <stdlib.h> 
 #include <stdio.h>
-#include <stdlib.h>
+#include <string.h> 
 
-struct prod{
-    char nomeProd[100]; 
-    unsigned long long int quantidade;
+struct Prod{
+    char nomeProd[100];
+    long long int qtd; 
     double preco;
 };
 
-typedef struct prod produto;
+typedef struct Prod produto;
 
 // Protótipos das funções
 
-produto *alocaProduto(unsigned int estoque);
-void inserirProduto(produto** dados);//char *nome, unsigned int quantidade, double preco
-void aumentaEstoque(produto *a, unsigned long long int quantidade);
-void modificaPreco(produto *a, double valor);
-void realizaVenda();
-void consuntaEstoque();
-void consultaSaldo();
-void finalizaDia();
+void inserirProduto(produto **dados, int *tam);
+void aumentaEstoque(produto *dados, unsigned int codigo, long long int quantidade);
+void modificaPreco(produto *dados);
+double realizaVenda(produto *dados, unsigned int codigo);
+void consultaEstoque(produto *dados, int qtdEstoque);
+void consultaSaldo(double saldo);
+void finalizaDia(FILE **fp, int qtdEstoque, double saldo, produto *dados);
 
-// usaremos arquivos (binários)
+// explicar o que cada função faz
+//adicionar comentários em cada função
 
-produto *alocaProduto(unsigned int estoque){
-    produto *prod;
+void inserirProduto(produto **dados, int *tam){
+    *dados = (produto *)realloc(*dados, ((*tam) + 1) * sizeof(produto));
+ 
+    scanf("%s %lld %lf", (*dados)[*tam].nomeProd, &((*dados)[*tam]).qtd, &(*dados)[*tam].preco);
+    (*tam)++;
+}
 
-    if((prod = (produto *) malloc(estoque * sizeof(produto))) == NULL){
-        printf("Erro ao alocar memória");
-        exit (1);
+void aumentaEstoque(produto *dados, unsigned int codigo, long long int quantidade){
+    dados[codigo].qtd += quantidade;
+}
+
+void modificaPreco(produto *dados) {
+    int codigo; double preco;
+    scanf("%d %lf", &codigo, &preco);
+    dados[codigo].preco = preco;
+}
+
+double realizaVenda(produto *dados, unsigned int codigo){
+    if(!dados[codigo].qtd) return 0.00;
+    dados[codigo].qtd--; 
+    printf("%s %.2lf\n", dados[codigo].nomeProd, dados[codigo].preco);
+    return dados[codigo].preco;
+}
+
+void consultaEstoque(produto *dados, int qtdEstoque){
+    
+    for (int i = 0; i < qtdEstoque; i++) {
+        printf("%d %s %lld\n", i, dados[i].nomeProd, dados[i].qtd);
     }
-//precisa tambem realocar dinâmicamente o vetor de produtos
-    return prod; 
+
+    for(int i = 0; i < 50; i++){
+        printf("-");
+    }
+    printf("\n");
 }
 
-void inserirProduto(produto** dados,unsigned int qtd/char *nome, unsigned int quantidade, double preco/){ 
-    //tem que passar o ponteiro do produto
-    int t=qtd;
-    (dados)=(produto)realloc(*dados,(t+1)*sizeof(produto));
-    scanf("%s %llu %lf", (*dados)[t].nomeProd, &((*dados)[t].quantidade), &((*dados)[t].preco));    
-}   
-
-void aumentaEstoque(produto *a, unsigned long long int quantidade){            
-    *a.quantidade = *a.quantidade + quantidade;//derreferenciar
+void consultaSaldo(double saldo){
+    printf("Saldo: %.2lf\n", saldo);
+    for(int i = 0; i < 50; i++){
+        printf("-");
+    }
+    printf("\n");
 }
 
-void modificaPreco(produto *a, double valor){
-    *a.preco = valor;//derreferenciae?
-}
-
-void realizaVenda(int codigo){
-    dados[codigo].quantidade--;
-}
-
-void realizaVenda(int codigo){
-
-}
-
-
-void finalizaDia(){
-    // mexer com os arquivos
-    exit(1);
+void finalizaDia(FILE **fp, int qtdEstoque, double saldo, produto *dados){
+ 
+    if ((*fp = fopen("arquivo_estoque", "w")) == NULL) {
+        printf("Erro na abertura do arquivo");
+        exit(1);
+    }
+ 
+    fprintf(*fp, "%d\n", qtdEstoque);
+    fprintf(*fp, "%.2lf\n", saldo);
+ 
+    for (int i = 0; i < qtdEstoque; i++) {
+        fprintf(*fp, "%s %lld %.2lf\n", dados[i].nomeProd,  dados[i].qtd, dados[i].preco);
+    }
+ 
+    fclose(*fp);
 }
 
 int main(void){
-    unsigned int qtdEstoque;
-    long long int saldo;
-    FILE *fp;
-    char id[3]; 
-    produto *dados;
- 
-    // etapas:
-   
-    fp = fopen("ArquivoEstoque.txt","r");  
 
-    if(fp!=NULL){
-        fscanf(fp,"%u",&qtdEstoque);
-        fscanf(fp,"%lld",&saldo);
+    FILE *fp; 
+    int tam_estoque = 0;
+    double saldo = 0.00;
+    produto *dados; 
 
-        for(int i=0;i<qtdEstoque;i++){
-             fscanf(fp," %s",dados[i].nomeProd);
-             fscanf(fp," %llu",&dados[i].quantidade); 
-             fscanf(fp," %lf",&dados[i].preco);
-        }
-       fclose(fp);
-      fp= fopen("ArquivoEstoque.txt","w");
-         if(fp==NULL){
-           printf("erro na abertura do arquivo");
-           exit(1);
-         }
-            
-    } else{
-        fp=fopen("ArquivoEstoque.txt","w");
-        scanf("%u %lld", &qtdEstoque, &saldo);
+    dados = NULL;
+
+    if((fp=fopen("arquivo_estoque", "rb")) == NULL){ 
+        // Primeiro dia 
+        scanf("%d %lf", &tam_estoque, &saldo);     
+        tam_estoque = 0; 
     }
-     
-    inserirProduto(&dados,qtdEstoque);
-// falta adicionar os codigos dos produtos
-    while(1){
+
+    else{
+        
+        fscanf(fp, "%d", &tam_estoque);
+        fscanf(fp, "%lf", &saldo);
+        dados = (produto *)calloc(tam_estoque, sizeof(produto));
+
+        for(int i = 0 ; i < tam_estoque ; i++){
+            fscanf(fp, " %s %lld %lf", dados[i].nomeProd, &(dados[i].qtd), &(dados[i].preco));
+        }
+
+        fclose(fp);
+    }
+
+    while (1) {
+        
+        char id[3]; 
         scanf("%s", id);
-
-        if(id == "IP"){
-            dados = alocaProduto(qtdEstoque);
-            qtdEstoque++;
-            if(qtdEstoque > 0){
-                for(int i = 0; i < qtdEstoque; i++){
-                    
-                    dados[i] = inserirProduto(dados[i].nomeProd, dados[i].);
+ 
+        if (strcmp(id, "IP") == 0) {
+            inserirProduto(&dados, &tam_estoque);
+        } else if (strcmp(id, "AE") == 0) {
+            unsigned int codigo;
+            long long int quantidade;
+            scanf("%u %lld", &codigo, &quantidade);
+            aumentaEstoque(dados, codigo, quantidade);
+        } else if (strcmp(id, "MP") == 0) {
+            modificaPreco(dados);
+        } else if (strcmp(id, "VE") == 0) {
+            int codigo; 
+            double total = 0.00;               
+ 
+            while (1) {
+                scanf("%u", &codigo);
+                if(codigo == -1){
+                    break;
                 }
-            } else{
-                scanf("%s %u %lf", );
+
+                if(dados[codigo].qtd != 0){ 
+                    saldo += dados[codigo].preco;
+                    total += realizaVenda(dados, codigo);
+                }
             }
+ 
+            printf("Total: %.2lf\n", total);
 
-        } else if(id == "AE"){
-            
-
-        } else if(id == "MP"){
-            
-
-
-        } else if(id == "VE"){
-            int codigo;
-
-            while(scanf("%d", codigo) != -1){
-                double total = 0;
-                realizaVenda(codigo);
-                printf("%s %.2lf\n", dados[codigo].nomeProd, dados[codigo].preco)
-                total += dados[codigo].preco.
+            for(int i = 0; i < 50; i++){
+                printf("-");
             }
-            saldo += total;
-            printf("%.2lf", total);
-            printf("\n--------------------------------------------------");
-        } else if(id == "CE"){
-            for(int i = 0; i < qtdEstoque; i++){
-                printf("%d %s %llu\n", /*codigo*/, dados[i].nomeProd, dados[i].quantidade);
-            }
-            printf("\n--------------------------------------------------");
-        } else if(id == "CS"){
-            printf("Saldo: %.2lf", saldo);
-            printf("\n--------------------------------------------------");
-        } else if(id == "FE"){
-            // usar arquivos
-            finalizaDia();
+            printf("\n");
+        } else if (strcmp(id, "CE") == 0) {
+            consultaEstoque(dados, tam_estoque);
+        } else if (strcmp(id, "CS") == 0) {
+            consultaSaldo(saldo);
+        } else if (strcmp(id, "FE") == 0) {
+            finalizaDia(&fp, tam_estoque, saldo, dados);
+            break;
         }
     }
 
-    fprintf(fp,"%u\n",qtdEstoque);
-    fprintf(fp,"%lld\n",saldo);
-    
-    fclose(fp);
+    if (dados != NULL) {
+        free(dados);
+        dados = NULL;
+    }
+ 
     return 0;
 }

@@ -1,0 +1,17 @@
+0
+100
+CS
+CE
+IP banana 3 5.90
+CE
+VE 0 0 0 0 -1
+CE
+IP abacaxi 10 3.85
+AE 1 1
+VE 0 1 1 1 1 1 1 1 1 1 1 -1
+CE
+MP 1 2.99
+VE 1 -1
+CS
+CE
+FE
