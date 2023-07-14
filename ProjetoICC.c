@@ -48,7 +48,7 @@ void modificaPreco(produto *dados) {// recebe o vetor dados
 }
 
 double realizaVenda(produto *dados, unsigned int codigo){// recebe o vetor dados e o codigo do produto a ser vendido
-    if(!dados[codigo].qtd){checagem da quantidade do produto para possibilitar a venda
+    if(!dados[codigo].qtd){// checagem da quantidade do produto para possibilitar a venda
         return 0.00;// saída imediata da função
     }
     dados[codigo].qtd--;// redução da quantidade do produto pois está sendo vendido 
